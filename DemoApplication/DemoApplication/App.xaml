@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:services="clr-namespace:DemoApplication.Services"
+             xmlns:dataControls="clr-namespace:Easy.DataVisualization.Controls;assembly=Easy.DataVisualization"
+             x:Class="DemoApplication.App">
+  <Application.Resources>
+
+    <!-- Application resource dictionary -->
+    <ResourceDictionary>
+      <services:DemoDataService x:Key="dataService" />
+
+      <Style TargetType="dataControls:DataPage">
+        <Setter Property="DataService" Value="{StaticResource dataService}" />
+
+        <Setter Property="ControlTemplate">
+          <ControlTemplate>
+            <Grid>
+              <ContentPresenter>
+                <ContentPresenter.Triggers>
+                  <DataTrigger TargetType="ContentPresenter" Binding="{TemplateBinding HasMessage}" Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                  </DataTrigger>
+                </ContentPresenter.Triggers>
+              </ContentPresenter>
+
+              <StackLayout IsVisible="{TemplateBinding HasMessage}">
+                <Label Text="{TemplateBinding MessageType}" />
+                <Label Text="{TemplateBinding Message}" />
+              </StackLayout>
+
+              <!-- TODO: Add loading screen -->
+            </Grid>
+          </ControlTemplate>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+
+  </Application.Resources>
+</Application>

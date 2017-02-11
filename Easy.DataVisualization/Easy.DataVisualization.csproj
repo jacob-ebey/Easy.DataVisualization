@@ -35,10 +35,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Easy.DataVisualization.cs" />
+    <Compile Include="Controls\ControlResolver.cs" />
+    <Compile Include="Controls\DataPage.cs" />
+    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\DataPageModel.cs" />
+    <Compile Include="Models\InternalDataPageModel.cs" />
+    <Compile Include="Models\ListDataModel.cs" />
+    <Compile Include="MVVM\ExpandoHelper.cs" />
+    <Compile Include="MVVM\IErrorHandler.cs" />
+    <Compile Include="MVVM\IPrepDataHandler.cs" />
+    <Compile Include="MVVM\IPrepListData.cs" />
+    <Compile Include="MVVM\DataViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IDataService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
