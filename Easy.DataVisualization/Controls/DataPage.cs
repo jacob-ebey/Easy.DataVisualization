@@ -47,6 +47,15 @@ namespace Easy.DataVisualization.Controls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="IControlResolver"/> to use.
+        /// </summary>
+        public IControlResolver ControlResolver
+        {
+            get { return (IControlResolver)GetValue(ControlResolverProperty); }
+            set { SetValue(ControlResolverProperty, value); }
+        }
+
+        /// <summary>
         /// The source to fetch data from via the registred <see cref="IDataService"/>.
         /// </summary>
         public object Source
@@ -96,6 +105,17 @@ namespace Easy.DataVisualization.Controls
             await DoRequestAsync(newValue, Source);
         }
 
+        private async void OnControlResolverPropertyChanged(IControlResolver oldValue, IControlResolver newValue)
+        {
+            await OnControlResolverPropertyChangedAsync(oldValue, newValue);
+        }
+
+        // TODO: Test this method and abstract ui dispatching
+        internal async Task OnControlResolverPropertyChangedAsync(object oldValue, object newValue)
+        {
+            await DoRequestAsync(DataService, Source);
+        }
+
         private async void OnSourcePropertyChanged(object oldValue, object newValue)
         {
             await OnSourcePropertyChangedAsync(oldValue, newValue);
@@ -109,7 +129,7 @@ namespace Easy.DataVisualization.Controls
 
         private async Task DoRequestAsync(IDataService dataService, object source)
         {
-            if (dataService != null)
+            if (dataService != null && ControlResolver != null)
             {
                 string tempData = null;
                 try
@@ -247,6 +267,15 @@ namespace Easy.DataVisualization.Controls
             propertyChanged: OnDataServicePropertyChanged);
 
         /// <summary>
+        /// The backing field for the <see cref="DataService"/> property.
+        /// </summary>
+        public static readonly BindableProperty ControlResolverProperty = BindableProperty.Create(
+            nameof(ControlResolver),
+            typeof(IControlResolver),
+            typeof(DataPage),
+            propertyChanged: OnControlResolverPropertyChanged);
+
+        /// <summary>
         /// The backing field for the <see cref="Source"/> property.
         /// </summary>
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(
@@ -276,6 +305,11 @@ namespace Easy.DataVisualization.Controls
         private static void OnDataServicePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             (bindable as DataPage)?.OnDataServicePropertyChanged((IDataService) oldValue, (IDataService) newValue);
+        }
+
+        private static void OnControlResolverPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            (bindable as DataPage)?.OnControlResolverPropertyChanged((IControlResolver)oldValue, (IControlResolver)newValue);
         }
 
         private static void OnSourcePropertyChanged(BindableObject bindable, object oldValue, object newValue)

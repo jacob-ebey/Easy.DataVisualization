@@ -9,11 +9,8 @@ namespace DemoApplication
     {
         public App()
         {
-            ControlResolver.Register<DemoDataView>("DemoDataModel");
-            ControlResolver.Register<DemoListDataView>("DemoListDataModel");
-
             InitializeComponent();
-
+            
             MainPage = new NavigationPage(new DataPage());
         }
 

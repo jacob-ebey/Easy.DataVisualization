@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DemoApplication"
              xmlns:services="clr-namespace:DemoApplication.Services"
              xmlns:dataControls="clr-namespace:Easy.DataVisualization.Controls;assembly=Easy.DataVisualization"
              x:Class="DemoApplication.App">
@@ -8,10 +9,13 @@
 
     <!-- Application resource dictionary -->
     <ResourceDictionary>
+      <local:DemoControlResolver x:Key="controlResolver" />
       <services:DemoDataService x:Key="dataService" />
 
       <Style TargetType="dataControls:DataPage">
         <Setter Property="DataService" Value="{StaticResource dataService}" />
+
+        <Setter Property="ControlResolver" Value="{StaticResource controlResolver}" />
 
         <Setter Property="ControlTemplate">
           <ControlTemplate>
