@@ -13,7 +13,6 @@ namespace Easy.DataVisualization.Controls
     // Tasks for DataPage.
     // TODO: - Abstract UI dispatching for unit testing.
     // TODO: - Expose IsLoading property for templates to show a loading overlay.
-    // TODO: - Abstract out ControlResolver so it isn't static and is a property of DataPage
 
     /// <summary>
     /// The type of a message to show to a user.
@@ -36,6 +35,10 @@ namespace Easy.DataVisualization.Controls
 
             Content = _layout;
         }
+
+        // TODO: Create an ILayoutManeger that will handle the current appending to a StackLayout
+        // View RootView { get; }
+        // void AddChild(View v);
 
         /// <summary>
         /// Gets or sets the <see cref="IDataService"/> to use.
@@ -90,43 +93,6 @@ namespace Easy.DataVisualization.Controls
             get { return Message != null; }
         }
 
-        private async void OnDataServicePropertyChanged(IDataService oldValue, IDataService newValue)
-        {
-            await OnDataServicePropertyChangedAsync(oldValue, newValue);
-        }
-
-        internal async Task OnDataServicePropertyChangedAsync(IDataService oldValue, IDataService newValue)
-        {
-            if (oldValue == newValue)
-            {
-                return;
-            }
-
-            await DoRequestAsync(newValue, Source);
-        }
-
-        private async void OnControlResolverPropertyChanged(IControlResolver oldValue, IControlResolver newValue)
-        {
-            await OnControlResolverPropertyChangedAsync(oldValue, newValue);
-        }
-
-        // TODO: Test this method and abstract ui dispatching
-        internal async Task OnControlResolverPropertyChangedAsync(object oldValue, object newValue)
-        {
-            await DoRequestAsync(DataService, Source);
-        }
-
-        private async void OnSourcePropertyChanged(object oldValue, object newValue)
-        {
-            await OnSourcePropertyChangedAsync(oldValue, newValue);
-        }
-
-        // TODO: Test this method and abstract ui dispatching
-        internal async Task OnSourcePropertyChangedAsync(object oldValue, object newValue)
-        {
-            await DoRequestAsync(DataService, newValue);
-        }
-
         private async Task DoRequestAsync(IDataService dataService, object source)
         {
             if (dataService != null && ControlResolver != null)
@@ -154,11 +120,6 @@ namespace Easy.DataVisualization.Controls
                     PopulateFromData(newData);
                 });
             }
-        }
-
-        internal void OnMessagePropertyChanged(string oldValue, string newValue)
-        {
-            OnPropertyChanged(nameof(Message));
         }
 
         private void PopulateFromData(InternalDataPageModel data)
@@ -254,6 +215,52 @@ namespace Easy.DataVisualization.Controls
                 }
             }
         }
+
+        #region Bindable on change handlers
+
+        private async void OnDataServicePropertyChanged(IDataService oldValue, IDataService newValue)
+        {
+            await OnDataServicePropertyChangedAsync(oldValue, newValue);
+        }
+
+        internal async Task OnDataServicePropertyChangedAsync(IDataService oldValue, IDataService newValue)
+        {
+            if (oldValue == newValue)
+            {
+                return;
+            }
+
+            await DoRequestAsync(newValue, Source);
+        }
+
+        private async void OnControlResolverPropertyChanged(IControlResolver oldValue, IControlResolver newValue)
+        {
+            await OnControlResolverPropertyChangedAsync(oldValue, newValue);
+        }
+
+        // TODO: Test this method and abstract ui dispatching
+        internal async Task OnControlResolverPropertyChangedAsync(object oldValue, object newValue)
+        {
+            await DoRequestAsync(DataService, Source);
+        }
+
+        private async void OnSourcePropertyChanged(object oldValue, object newValue)
+        {
+            await OnSourcePropertyChangedAsync(oldValue, newValue);
+        }
+
+        // TODO: Test this method and abstract ui dispatching
+        internal async Task OnSourcePropertyChangedAsync(object oldValue, object newValue)
+        {
+            await DoRequestAsync(DataService, newValue);
+        }
+
+        internal void OnMessagePropertyChanged(string oldValue, string newValue)
+        {
+            OnPropertyChanged(nameof(Message));
+        }
+
+        #endregion
 
         #region Static shit
 
