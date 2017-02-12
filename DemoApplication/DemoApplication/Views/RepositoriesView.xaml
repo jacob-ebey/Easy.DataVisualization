@@ -3,6 +3,9 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
           x:Class="DemoApplication.Views.RepositoriesView"
           ItemsSource="">
+  <ListView.Header>
+    <Label Text="Public Repos:" />
+  </ListView.Header>
   <ListView.ItemTemplate>
     <DataTemplate>
       <TextCell Text="{Binding Path=[name]}" Detail="{Binding Path=[description]}" />

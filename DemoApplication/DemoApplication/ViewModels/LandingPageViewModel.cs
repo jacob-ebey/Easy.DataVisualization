@@ -9,7 +9,11 @@ namespace DemoApplication.ViewModels
         {
             BrowseCommand = new Command(() =>
             {
-                Application.Current.MainPage.Navigation.PushAsync(new DataPage() { Source = UserName });
+                Application.Current.MainPage.Navigation.PushAsync(new DataPage()
+                {
+                    Source = UserName,
+                    BindingContext = new ResultPageViewModel()
+                });
             });
         }
 

@@ -11,11 +11,14 @@
     <ResourceDictionary>
       <local:DemoControlResolver x:Key="controlResolver" />
       <services:GithubUserService x:Key="dataService" />
-
+      
       <Style TargetType="dataControls:DataPage">
         <Setter Property="DataService" Value="{StaticResource dataService}" />
 
         <Setter Property="ControlResolver" Value="{StaticResource controlResolver}" />
+
+        <Setter Property="Message" Value="{Binding Message}" />
+        <Setter Property="MessageType" Value="{Binding MessageType}" />
 
         <Setter Property="ControlTemplate">
           <ControlTemplate>

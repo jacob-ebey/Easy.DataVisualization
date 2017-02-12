@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DemoApplication.Views.LandingPage">
   <StackLayout>
-    <Label Text="Github User Name" HorizontalTextAlignment="Center" />
+    <Label Text="Github User Name" />
     <Entry Text="{Binding Path=UserName, Mode=TwoWay}" />
     <Button Text="Browse" Command="{Binding BrowseCommand}" />
   </StackLayout>

@@ -267,7 +267,7 @@ namespace Easy.DataVisualization.Controls
 
         internal void OnMessagePropertyChanged(string oldValue, string newValue)
         {
-            OnPropertyChanged(nameof(Message));
+            OnPropertyChanged(nameof(HasMessage));
         }
 
         #endregion
