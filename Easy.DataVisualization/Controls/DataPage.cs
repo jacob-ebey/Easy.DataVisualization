@@ -12,12 +12,7 @@ namespace Easy.DataVisualization.Controls
 {
     // Tasks for DataPage.
     // TODO: - Abstract UI dispatching for unit testing.
-
-    /// <summary>
-    /// The type of a message to show to a user.
-    /// </summary>
-    public enum MessageType { Information, Warning, Error }
-
+    
     /// <summary>
     /// The page for presenting data visualizations served from the Microsoft.Forms.DataVisualization framework.
     /// </summary>

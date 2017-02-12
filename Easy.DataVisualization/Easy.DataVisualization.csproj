@@ -41,6 +41,7 @@
     <Compile Include="Models\DataPageModel.cs" />
     <Compile Include="Models\InternalDataPageModel.cs" />
     <Compile Include="Models\ListDataModel.cs" />
+    <Compile Include="MVVM\MessageType.cs" />
     <Compile Include="MVVM\ExpandoHelper.cs" />
     <Compile Include="MVVM\IErrorHandler.cs" />
     <Compile Include="MVVM\IPrepDataHandler.cs" />

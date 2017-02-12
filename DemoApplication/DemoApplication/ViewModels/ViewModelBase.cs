@@ -1,4 +1,4 @@
-﻿using Easy.DataVisualization.Controls;
+﻿using Easy.DataVisualization.MVVM;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
