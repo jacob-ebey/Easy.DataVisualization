@@ -7,8 +7,8 @@ namespace DemoApplication
     {
         public DemoControlResolver()
         {
-            Register<DemoDataView>("DemoDataModel");
-            Register<DemoListDataView>("DemoListDataModel");
+            Register<UserView>("UserModel");
+            Register<RepositoriesView>("ReposModel");
         }
     }
 }

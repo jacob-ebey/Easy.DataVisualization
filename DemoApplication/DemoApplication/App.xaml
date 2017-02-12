@@ -10,7 +10,7 @@
     <!-- Application resource dictionary -->
     <ResourceDictionary>
       <local:DemoControlResolver x:Key="controlResolver" />
-      <services:DemoDataService x:Key="dataService" />
+      <services:GithubUserService x:Key="dataService" />
 
       <Style TargetType="dataControls:DataPage">
         <Setter Property="DataService" Value="{StaticResource dataService}" />
@@ -33,7 +33,9 @@
                 <Label Text="{TemplateBinding Message}" />
               </StackLayout>
 
-              <!-- TODO: Add loading screen -->
+              <Grid IsVisible="{TemplateBinding IsLoading}" BackgroundColor="White">
+                <ActivityIndicator IsRunning="{TemplateBinding IsLoading}" />
+              </Grid>
             </Grid>
           </ControlTemplate>
         </Setter>

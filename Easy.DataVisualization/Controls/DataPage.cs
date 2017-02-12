@@ -12,7 +12,6 @@ namespace Easy.DataVisualization.Controls
 {
     // Tasks for DataPage.
     // TODO: - Abstract UI dispatching for unit testing.
-    // TODO: - Expose IsLoading property for templates to show a loading overlay.
 
     /// <summary>
     /// The type of a message to show to a user.
@@ -93,15 +92,30 @@ namespace Easy.DataVisualization.Controls
             get { return Message != null; }
         }
 
+        int taskCount = 0;
+        public bool IsLoading
+        {
+            get { return taskCount > 0; }
+        }
+
         private async Task DoRequestAsync(IDataService dataService, object source)
         {
             if (dataService != null && ControlResolver != null)
             {
-                string tempData = null;
                 try
                 {
+                    taskCount++;
+                    OnPropertyChanged(nameof(IsLoading));
+
                     // TODO: Expose a result type to allow passing error messages from the service to the VM layer.
-                    tempData = await dataService.GetDataAsync(source);
+                    string tempData = await dataService.GetDataAsync(source);
+
+                    InternalDataPageModel newData = JsonConvert.DeserializeObject<InternalDataPageModel>(tempData);
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        PopulateFromData(newData);
+                    });
                 }
                 catch (Exception e)
                 {
@@ -110,15 +124,11 @@ namespace Easy.DataVisualization.Controls
                         await (BindingContext as IErrorHandler).HandleExceptionAsync(e);
                     }
                 }
-
-                InternalDataPageModel newData = null;
-                try { newData = JsonConvert.DeserializeObject<InternalDataPageModel>(tempData); }
-                catch { }
-
-                Device.BeginInvokeOnMainThread(() =>
+                finally
                 {
-                    PopulateFromData(newData);
-                });
+                    taskCount--;
+                    OnPropertyChanged(nameof(IsLoading));
+                }             
             }
         }
 
@@ -174,7 +184,7 @@ namespace Easy.DataVisualization.Controls
 
                             setBindingContext = control.BindingContext == null;
 
-                            var binding = new ExpandoHelper(dataModel, dataType);
+                            var binding = new ExpandoHelper(dataModel);
                             if (setBindingContext)
                             {
                                 control.BindingContext = binding;

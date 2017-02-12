@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="DemoApplication.Views.UserView">
+  <ContentView.Content>
+    <StackLayout>
+      <Image Source="{Binding Path=[User__avatar_url]}" WidthRequest="200" HeightRequest="200" />
+      <Label Text="{Binding Path=[User__name]}" FontSize="Large" />
+      <Label Text="{Binding Path=[User__login]}" />
+      <Label Text="{Binding Path=[User__location]}" />
+      <Label Text="{Binding Path=[User__email]}" />
+    </StackLayout>
+  </ContentView.Content>
+</ContentView>

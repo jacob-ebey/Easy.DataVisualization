@@ -13,36 +13,95 @@ namespace Easy.DataVisualization.MVVM
     {
         private IDictionary<string, object> _dict;
 
-        public ExpandoHelper(ExpandoObject o, string dataType = null)
+        public ExpandoHelper(IDictionary<string, object> o)
         {
             _dict = o;
-            DataType = dataType;
         }
 
-        public string DataType { get; }
+        public object GetRecursive(string path, object lastResult = null)
+        {
+            var helper = lastResult as ExpandoHelper;
+
+            if (string.IsNullOrWhiteSpace(path) || helper == null)
+            {
+                return lastResult == this ? null : lastResult;
+            }
+
+            var split = path.Split(new string[] { "__" }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+            
+            return GetRecursive(split.Length == 2 ? split[1] : null, helper[split[0]]);
+        }
+
+        public void SetRecursive(string path, object value, ExpandoHelper helper)
+        {
+            if (path == null)
+            {
+                return;
+            }
+
+            if (!path.Contains("__"))
+            {
+                helper[path] = value;
+            }
+
+            var split = path.Split(new string[] { "__" }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+
+            ExpandoHelper newHelper = null;
+            object itemAtKey = helper[split[0]];
+
+            if (itemAtKey != null && (itemAtKey as ExpandoHelper) == null)
+            {
+                return;
+            }
+            else if (itemAtKey == null)
+            {
+                helper[split[0]] = newHelper = new ExpandoHelper(new ExpandoObject());
+            }
+            else
+            {
+                newHelper = itemAtKey as ExpandoHelper;
+            }
+
+            SetRecursive(split.Length == 2 ? split[1] : null, value, newHelper);
+        }
 
         public object this[string key]
         {
             get
             {
                 object result = null;
-                if (_dict?.TryGetValue(key, out result) ?? false)
+                if (!key.Contains("__"))
                 {
-                    if (result as ExpandoObject != null)
+                    if (_dict?.TryGetValue(key, out result) ?? false)
                     {
-                        _dict[key] = result = new ExpandoHelper(result as ExpandoObject);
+                        if (result as IDictionary<string, object> != null && result as ExpandoHelper == null)
+                        {
+                            _dict[key] = result = new ExpandoHelper(result as IDictionary<string, object>);
+                        }
                     }
+                }
+                else
+                {
+                    result = GetRecursive(key, this);
                 }
                 return result;
             }
-
             set
             {
                 if (_dict == null)
                 {
                     _dict = new ExpandoObject();
                 }
-                _dict[key] = value;
+
+                if (!key.Contains("__"))
+                {
+                    _dict[key] = value;
+                }
+                else
+                {
+
+                }
+
                 OnPropertyChanged($"Item[{key}]");
             }
         }

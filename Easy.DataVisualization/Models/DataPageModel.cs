@@ -10,6 +10,6 @@ namespace Easy.DataVisualization.Models
         /// <summary>
         /// The data to display.
         /// </summary>
-        public IEnumerable<DataModel> Data { get; set; }
+        public IEnumerable<IDataModel> Data { get; set; }
     }
 }
