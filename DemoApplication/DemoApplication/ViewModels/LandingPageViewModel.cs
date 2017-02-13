@@ -9,11 +9,13 @@ namespace DemoApplication.ViewModels
         {
             BrowseCommand = new Command(() =>
             {
-                Application.Current.MainPage.Navigation.PushAsync(new DataPage()
+                var page = new DataPage()
                 {
                     Source = UserName,
                     BindingContext = new ResultPageViewModel()
-                });
+                };
+                (page.LayoutManeger as StackLayoutManeger).Orientation = StackOrientation.Horizontal;
+                Application.Current.MainPage.Navigation.PushAsync(page);
             });
         }
 

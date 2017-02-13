@@ -65,11 +65,20 @@ namespace Easy.DataVisualization.MVVM
             SetRecursive(split.Length == 2 ? split[1] : null, value, newHelper);
         }
 
+        // TODO: Document the double underscore syntax for safe, recursive lookup
+        // as well as ?? for the null check wich is esentially this[key] != null as the result.
         public object this[string key]
         {
             get
             {
                 object result = null;
+                bool isNullCheck = false;
+                if (key.Length > 2 && key.Substring(0, 2) == "??")
+                {
+                    key = key.Substring(2);
+                    isNullCheck = true;
+                }
+
                 if (!key.Contains("__"))
                 {
                     if (_dict?.TryGetValue(key, out result) ?? false)
@@ -84,6 +93,12 @@ namespace Easy.DataVisualization.MVVM
                 {
                     result = GetRecursive(key, this);
                 }
+
+                if (isNullCheck)
+                {
+                    result = result != null;
+                }
+
                 return result;
             }
             set

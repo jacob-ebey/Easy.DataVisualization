@@ -18,21 +18,23 @@ namespace Easy.DataVisualization.Controls
     /// </summary>
     public class DataPage : ContentPage
     {
-        private StackLayout _layout;
-
         /// <summary>
         /// Creates a new instance of <see cref="DataPage"/>.
         /// </summary>
         public DataPage()
         {
-            _layout = new StackLayout();
-
-            Content = _layout;
+            LayoutManeger = new StackLayoutManeger();
         }
 
-        // TODO: Create an ILayoutManeger that will handle the current appending to a StackLayout
-        // View RootView { get; }
-        // void AddChild(View v);
+        /// <summary>
+        /// The layout maneger that controls how child elements are added to the root view.
+        /// </summary>
+        /// <remarks>This defaults to an instance of <see cref="StackLayoutManeger"/>.</remarks>
+        public ILayoutManeger LayoutManeger
+        {
+            get { return (ILayoutManeger)GetValue(LayoutManegerProperty); }
+            set { SetValue(LayoutManegerProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="IDataService"/> to use.
@@ -95,7 +97,7 @@ namespace Easy.DataVisualization.Controls
 
         private async Task DoRequestAsync(IDataService dataService, object source)
         {
-            if (dataService != null && ControlResolver != null)
+            if (dataService != null && ControlResolver != null && LayoutManeger != null)
             {
                 try
                 {
@@ -129,7 +131,7 @@ namespace Easy.DataVisualization.Controls
 
         private void PopulateFromData(InternalDataPageModel data)
         {
-            _layout.Children.Clear();
+            LayoutManeger.ClearChildren();
 
             if (data?.Data?.Any() ?? false)
             {
@@ -193,7 +195,7 @@ namespace Easy.DataVisualization.Controls
                                 }
                             }
 
-                            _layout.Children.Add(control);
+                            LayoutManeger.AddChild(control);
                         }
                         else
                         {
@@ -238,6 +240,20 @@ namespace Easy.DataVisualization.Controls
             await DoRequestAsync(newValue, Source);
         }
 
+        private async void OnLayoutManegerPropertyChanged(ILayoutManeger oldValue, ILayoutManeger newValue)
+        {
+            if (newValue != null)
+            {
+                Content = newValue.RootView;
+            }
+            await OnLayoutManegerPropertyChangedAsync(oldValue, newValue);
+        }
+
+        private async Task OnLayoutManegerPropertyChangedAsync(ILayoutManeger oldValue, ILayoutManeger newValue)
+        {
+            await DoRequestAsync(DataService, Source);
+        }
+
         private async void OnControlResolverPropertyChanged(IControlResolver oldValue, IControlResolver newValue)
         {
             await OnControlResolverPropertyChangedAsync(oldValue, newValue);
@@ -269,6 +285,15 @@ namespace Easy.DataVisualization.Controls
 
         #region Static shit
 
+        /// <summary>
+        /// The backing field for the <see cref="DataService"/> property.
+        /// </summary>
+        public static readonly BindableProperty LayoutManegerProperty = BindableProperty.Create(
+            nameof(LayoutManeger),
+            typeof(ILayoutManeger),
+            typeof(DataPage),
+            propertyChanged: OnLayoutManegerPropertyChanged);
+        
         /// <summary>
         /// The backing field for the <see cref="DataService"/> property.
         /// </summary>
@@ -313,6 +338,11 @@ namespace Easy.DataVisualization.Controls
             typeof(MessageType),
             typeof(DataPage),
             MessageType.Information);
+
+        private static void OnLayoutManegerPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            (bindable as DataPage)?.OnLayoutManegerPropertyChanged((ILayoutManeger)oldValue, (ILayoutManeger)newValue);
+        }
 
         private static void OnDataServicePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {

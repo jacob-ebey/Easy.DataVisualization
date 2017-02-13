@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="DemoApplication.Views.UserView">
   <ContentView.Content>
-    <StackLayout>
+    <StackLayout Margin="6">
       <Image Source="{Binding Path=[User__avatar_url]}" WidthRequest="200" HeightRequest="200" />
-      <Label Text="{Binding Path=[User__name]}" FontSize="Large" />
-      <Label Text="{Binding Path=[User__login]}" />
-      <Label Text="{Binding Path=[User__location]}" />
-      <Label Text="{Binding Path=[User__email]}" />
+      <Label Text="{Binding Path=[User__name]}" IsVisible="{Binding Path=[??User__name]}" FontSize="Large" />
+      <Label Text="{Binding Path=[User__login]}" IsVisible="{Binding Path=[??User__login]}" />
+      <Label Text="{Binding Path=[User__location], StringFormat='{}Location: {0}'}" IsVisible="{Binding Path=[??User__location]}" />
+      <Label Text="{Binding Path=[User__email], StringFormat='{}Email: {0}'}" IsVisible="{Binding Path=[??User__email]}" />
     </StackLayout>
   </ContentView.Content>
 </ContentView>

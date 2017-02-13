@@ -37,6 +37,8 @@
   <ItemGroup>
     <Compile Include="Controls\ControlResolver.cs" />
     <Compile Include="Controls\DataPage.cs" />
+    <Compile Include="Controls\ILayoutManeger.cs" />
+    <Compile Include="Controls\StackLayoutManeger.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\DataPageModel.cs" />
     <Compile Include="Models\InternalDataPageModel.cs" />
