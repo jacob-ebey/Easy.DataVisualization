@@ -1,7 +1,5 @@
-﻿using Easy.DataVisualization.Models;
-using Easy.DataVisualization.MVVM;
+﻿using Easy.DataVisualization.MVVM;
 using Easy.DataVisualization.Services;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +10,7 @@ namespace Easy.DataVisualization.Controls
 {
     // Tasks for DataPage.
     // TODO: - Abstract UI dispatching for unit testing.
-    
+
     /// <summary>
     /// The page for presenting data visualizations served from the Microsoft.Forms.DataVisualization framework.
     /// </summary>
@@ -103,11 +101,10 @@ namespace Easy.DataVisualization.Controls
                 {
                     taskCount++;
                     OnPropertyChanged(nameof(IsLoading));
+                    
+                    IDictionary<string, object> tempData = await dataService.GetDataAsync(source);
 
-                    // TODO: Expose a result type to allow passing error messages from the service to the VM layer.
-                    string tempData = await dataService.GetDataAsync(source);
-
-                    InternalDataPageModel newData = JsonConvert.DeserializeObject<InternalDataPageModel>(tempData);
+                    ExpandoHelper newData = new ExpandoHelper(tempData);
 
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -129,13 +126,13 @@ namespace Easy.DataVisualization.Controls
             }
         }
 
-        private void PopulateFromData(InternalDataPageModel data)
+        private void PopulateFromData(ExpandoHelper data)
         {
             LayoutManeger.ClearChildren();
 
-            if (data?.Data?.Any() ?? false)
+            if ((data["Data"] as IEnumerable<IDictionary<string, object>>)?.Any() ?? false)
             {
-                foreach (var dataModel in data.Data)
+                foreach (var dataModel in data["Data"] as IEnumerable<IDictionary<string, object>>)
                 {
                     var dataModelHelper = new ExpandoHelper(dataModel);
                     var dataType = dataModelHelper["DataType"] as string;
@@ -180,18 +177,17 @@ namespace Easy.DataVisualization.Controls
                             }
 
                             setBindingContext = control.BindingContext == null;
-
-                            var binding = new ExpandoHelper(dataModel);
+                            
                             if (setBindingContext)
                             {
-                                control.BindingContext = binding;
+                                control.BindingContext = dataModelHelper;
                             }
                             else
                             {
                                 if (control.BindingContext as IPrepDataHandler != null)
                                 {
-                                    (control.BindingContext as IPrepDataHandler).PrepBinding(binding);
-                                    (control.BindingContext as IPrepDataHandler).Data = binding;
+                                    (control.BindingContext as IPrepDataHandler).PrepBinding(dataModelHelper);
+                                    (control.BindingContext as IPrepDataHandler).Data = dataModelHelper;
                                 }
                             }
 

@@ -39,10 +39,9 @@
     <Compile Include="Controls\DataPage.cs" />
     <Compile Include="Controls\ILayoutManeger.cs" />
     <Compile Include="Controls\StackLayoutManeger.cs" />
-    <Compile Include="Models\DataModel.cs" />
-    <Compile Include="Models\DataPageModel.cs" />
-    <Compile Include="Models\InternalDataPageModel.cs" />
-    <Compile Include="Models\ListDataModel.cs" />
+    <Compile Include="Models\ExpandoDataModel.cs" />
+    <Compile Include="Models\ExpandoDataPageModel.cs" />
+    <Compile Include="Models\ExpandoListDataModel.cs" />
     <Compile Include="MVVM\MessageType.cs" />
     <Compile Include="MVVM\ExpandoHelper.cs" />
     <Compile Include="MVVM\IErrorHandler.cs" />

@@ -1,4 +1,5 @@
 ﻿using Easy.DataVisualization.Models;
+using Easy.DataVisualization.MVVM;
 using Easy.DataVisualization.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace DemoApplication.Services
 {
     class GithubUserService : IDataService
     {
-        public async Task<string> GetDataAsync(object source)
+        public async Task<IDictionary<string, object>> GetDataAsync(object source)
         {
             string stringSource = source as string;
 
@@ -22,17 +23,17 @@ namespace DemoApplication.Services
             {
                 DataType = "UserModel"
             };
-            userModel.Add("User", JsonConvert.DeserializeObject<ExpandoObject>(userResult));
+            userModel.Add("User", JsonConvert.DeserializeObject<ExpandoHelper>(userResult));
 
             var repoResult = await client.GetStringAsync($"https://api.github.com/users/{stringSource}/repos");
-            var repos = JsonConvert.DeserializeObject<IEnumerable<ExpandoObject>>(repoResult);
+            var repos = JsonConvert.DeserializeObject<IEnumerable<ExpandoHelper>>(repoResult);
 
-            DataPageModel model = new DataPageModel
+            ExpandoDataPageModel model = new ExpandoDataPageModel
             {
-                Data = new IDataModel[]
+                Data = new IDictionary<string, object>[]
                 {
                     userModel,
-                    new ListDataModel
+                    new ExpandoListDataModel
                     {
                         DataType = "ReposModel",
                         Items = repos
@@ -40,7 +41,7 @@ namespace DemoApplication.Services
                 }
             };
 
-            return JsonConvert.SerializeObject(model);
+            return model;
         }
     }
 }

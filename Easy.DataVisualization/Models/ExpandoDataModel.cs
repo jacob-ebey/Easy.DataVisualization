@@ -10,17 +10,6 @@ namespace Easy.DataVisualization.Models
         string DataType { get; set; }
     }
 
-    /// <summary>
-    /// A data model that gets a control registered to display for it.
-    /// </summary>
-    public class DataModel : IDataModel
-    {
-        /// <summary>
-        /// The data model identifier.
-        /// </summary>
-        public string DataType { get; set; }
-    }
-
     public class ExpandoDataModel : ExpandoHelper, IDataModel
     {
         public ExpandoDataModel() 

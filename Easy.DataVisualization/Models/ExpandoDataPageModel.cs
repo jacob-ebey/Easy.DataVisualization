@@ -1,14 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
 
 namespace Easy.DataVisualization.Models
 {
-    public class ExpandoDataPageModel
+    /// <summary>
+    /// Serve an instance of this from the serer.
+    /// </summary>
+    public class ExpandoDataPageModel : ExpandoDataModel
     {
         /// <summary>
-        /// The data to display. These should be served an insance of one of the supported subclasses of
-        /// <see cref="DataModel"/>.
+        /// The data to display.
         /// </summary>
-        public IEnumerable<IDictionary<string, object>> Data { get; set; }
+        public IEnumerable<IDictionary<string, object>> Data
+        {
+            get { return this[nameof(Data)] as IEnumerable<IDictionary<string, object>>; }
+            set
+            {
+                this[nameof(Data)] = value;
+            }
+        }
     }
 }
