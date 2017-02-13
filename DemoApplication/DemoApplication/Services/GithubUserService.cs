@@ -3,7 +3,6 @@ using Easy.DataVisualization.MVVM;
 using Easy.DataVisualization.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
 

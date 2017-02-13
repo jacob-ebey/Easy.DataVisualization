@@ -1,7 +1,6 @@
 ﻿using Easy.DataVisualization.MVVM;
 using System;
 using System.Threading.Tasks;
-using Easy.DataVisualization.Controls;
 
 namespace DemoApplication.ViewModels
 {
